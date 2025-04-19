@@ -11,19 +11,19 @@
     "postbuild": "next-sitemap"
   },
   "dependencies": {
-    "next": "latest",
-    "react": "latest",
-    "react-dom": "latest"
+    "next": "^15.3.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
   },
   "devDependencies": {
     "@tailwindcss/forms": "latest",
-    "autoprefixer": "latest",
+    "autoprefixer": "^10.4.21",
     "eslint": "latest",
-    "postcss": "latest",
-    "tailwindcss": "latest",
-    "typescript": "latest",
     "next-sitemap": "latest",
+    "postcss": "^8.5.3",
     "prettier": "latest",
-    "prettier-plugin-tailwindcss": "latest"
+    "prettier-plugin-tailwindcss": "latest",
+    "tailwindcss": "^4.1.4",
+    "typescript": "latest"
   }
 }

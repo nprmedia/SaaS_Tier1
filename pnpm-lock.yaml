@@ -9,20 +9,20 @@ importers:
   .:
     dependencies:
       next:
-        specifier: latest
+        specifier: ^15.3.1
         version: 15.3.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       react:
-        specifier: latest
+        specifier: ^19.1.0
         version: 19.1.0
       react-dom:
-        specifier: latest
+        specifier: ^19.1.0
         version: 19.1.0(react@19.1.0)
     devDependencies:
       '@tailwindcss/forms':
         specifier: latest
         version: 0.5.10(tailwindcss@4.1.4)
       autoprefixer:
-        specifier: latest
+        specifier: ^10.4.21
         version: 10.4.21(postcss@8.5.3)
       eslint:
         specifier: latest
@@ -31,7 +31,7 @@ importers:
         specifier: latest
         version: 4.2.3(next@15.3.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0))
       postcss:
-        specifier: latest
+        specifier: ^8.5.3
         version: 8.5.3
       prettier:
         specifier: latest
@@ -40,7 +40,7 @@ importers:
         specifier: latest
         version: 0.6.11(prettier@3.5.3)
       tailwindcss:
-        specifier: latest
+        specifier: ^4.1.4
         version: 4.1.4
       typescript:
         specifier: latest
