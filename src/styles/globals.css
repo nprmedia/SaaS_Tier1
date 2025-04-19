@@ -1,5 +1,7 @@
 /* globals.css — Tailwind base layer + global resets */
 
+@import './fonts.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -9,7 +11,7 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: theme('fontFamily.sans');
+  font-family: 'Inter', sans-serif;
   background-color: theme('colors.white');
   color: theme('colors.gray.900');
 }
