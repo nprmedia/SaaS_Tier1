@@ -17,7 +17,7 @@
 import { FC, useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/src/components/ui/button'
 
 interface StickyHeaderProps {
   logo: string

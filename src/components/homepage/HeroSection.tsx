@@ -4,7 +4,7 @@
 
 import { FC, useEffect, useState, useRef } from 'react'
 import { motion, useInView, useAnimationControls } from 'framer-motion'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/src/components/ui/button'
 import { Info, Flame, Users } from 'lucide-react'
 
 interface HeroSectionProps {

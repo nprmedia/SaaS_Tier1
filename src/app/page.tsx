@@ -2,7 +2,7 @@
 
 'use client'
 
-import HeroSection from '@/components/homepage/HeroSection'
+import HeroSection from '@/src/components/homepage/HeroSection'
 import { Flame } from 'lucide-react'
 
 export default function HomePage() {

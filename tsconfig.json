@@ -18,12 +18,12 @@
     "paths": {
       "@/*": ["./*"],
       "@app/*": ["app/*"],
-      "@components/*": ["components/*"],
-      "@lib/*": ["lib/*"],
+      "@components/*": ["src/components/*"],
+      "@lib/*": ["src/lib/*"],
       "@styles/*": ["styles/*"],
       "@utils/*": ["utils/*"],
-      "@hooks/*": ["hooks/*"],
-      "@types/*": ["types/*"]
+      "@hooks/*": ["src/hooks/*"],
+      "@types/*": ["src/types/*"]
     },
     "plugins": [
       { "name": "next" }
