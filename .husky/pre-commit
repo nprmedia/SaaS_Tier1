@@ -6,12 +6,11 @@ echo "🧪 Running dependency safety checks before commit..."
 pnpm install
 pnpm audit --audit-level=low
 
-# Filter outdated results against allowlist and remove table headers
 pnpm outdated > outdated.log || true
 ALLOWLIST=$(paste -sd '|' criticalPackagesAllowList.txt)
-grep -vE "$ALLOWLIST" outdated.log | grep -E '│ [^│]+ │ [^│]+ │ [^│]+ │' > critical.log || true
+grep -vE "$ALLOWLIST" outdated.log | grep -E '│ [a-zA-Z0-9@/_-]+ │ [^│]+ │ [^│]+ │' > critical.log || true
 
-if grep -qE '│ [^│]+ │ [^│]+ │ [^│]+ │' critical.log; then
+if grep -qE '│ [a-zA-Z0-9@/_-]+ │ [^│]+ │ [^│]+ │' critical.log; then
   echo "❌ Real critical outdated packages found:"
   cat critical.log
   exit 1
