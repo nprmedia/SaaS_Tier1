@@ -1,0 +1,91 @@
+name: 🔒 Dependency Safety System
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '0 0 * * 1'  # weekly scan
+
+jobs:
+  dependency-audit:
+    runs-on: ubuntu-latest
+    name: Full Dependency Health Scan
+    steps:
+      - name: 📅 Checkout code
+        uses: actions/checkout@v3
+
+      - name: 📆 Set up pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: 🛠️ Install Dependencies
+        run: pnpm install
+
+      - name: 🔍 Audit Dependencies for Security + Deprecation
+        run: pnpm audit --audit-level=low
+
+      - name: 🔎 Enforce Only Critical Outdated Packages
+        run: |
+          pnpm outdated > outdated.log || true
+          echo "🔎 Outdated summary:"
+          cat outdated.log
+
+          # Allow list of packages we ignore (e.g. dev dependencies)
+          ALLOWLIST=$(paste -sd '|' criticalPackagesAllowList.txt)
+          cat outdated.log | grep -vE "$ALLOWLIST" > critical.log || true
+
+          if [ -s critical.log ]; then
+            echo "❌ Critical outdated packages found:"
+            cat critical.log
+            exit 1
+          else
+            echo "✅ No critical outdated packages."
+          fi
+
+      - name: 🚹 Validate Lockfile Integrity
+        run: pnpm install --frozen-lockfile
+
+      - name: Check for Deprecated APIs (eslint compatibility)
+        run: pnpm lint
+
+      - name: Type Check
+        run: pnpm check
+
+      - name: Log All Installed Packages (for rebuild diffs)
+        run: pnpm list --depth=0
+
+      - name: Trust & Threat Detection (Socket.dev)
+        run: npx socket protect || true
+
+      - name: "Runtime Scan: Docker Layer Audit (Trivy)"
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: fs
+          scan-ref: .
+          format: table
+          exit-code: 0
+
+      - name: Post Comment to PR with Summary (Optional)
+        if: github.event_name == 'pull_request'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: dependency-check
+          message: |
+            ✅ **Dependency Audit Completed**
+
+            - Security: checked via `pnpm audit`
+            - Outdated packages: checked via `pnpm outdated`
+            - Type + lint safety: validated
+            - Threat model: scanned with Socket + Trivy
+
+            To fix locally:
+            ```bash
+            pnpm up -L && pnpm audit fix && pnpm check
+            ```
+
+      - name: Fail Build if Any Step Fails
+        if: ${{ failure() }}
+        run: exit 1

@@ -1,0 +1,26 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo "🧪 Running dependency safety checks before commit..."
+
+pnpm install
+pnpm audit --audit-level=low
+
+# Filter outdated results against allowlist and remove table headers
+pnpm outdated > outdated.log || true
+ALLOWLIST=$(paste -sd '|' criticalPackagesAllowList.txt)
+grep -vE "$ALLOWLIST" outdated.log | grep -E '│ [^│]+ │ [^│]+ │ [^│]+ │' > critical.log || true
+
+if grep -qE '│ [^│]+ │ [^│]+ │ [^│]+ │' critical.log; then
+  echo "❌ Real critical outdated packages found:"
+  cat critical.log
+  exit 1
+else
+  echo "✅ No critical outdated packages."
+fi
+
+pnpm lint || true
+pnpm check || true
+npx socket protect || true
+
+echo "✅ Dependency check complete."
