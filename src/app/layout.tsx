@@ -1,22 +1,11 @@
-// src/app/layout.tsx
-
-/**
- * 🧠 Features Implemented (Global SOP):
- * - App Router shell with global layout
- * - Includes StickyHeader + Footer
- * - Imports tailwind globals, HTML lang tag, font preload
- * - Section wrappers with max width
- * 💸 Tier Justification: Global experience control & branding
- * 📈 ROI Optimization: Trust, scroll behavior, consistent polish
- */
-
 import '@/styles/globals.css'
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
 import StickyHeader from '@/components/global/StickyHeader'
 import Footer from '@/components/global/Footer'
-
-const inter = Inter({ subsets: ['latin'], display: 'swap' })
+import { Toaster, toast } from '@/components/ui/sonner'
+import { useEffect } from 'react'
+import { usePathname, useSearchParams } from 'next/navigation'
+import { track } from '@/lib/analytics'
 
 export const metadata: Metadata = {
   title: 'Authority Platform',
@@ -24,9 +13,30 @@ export const metadata: Metadata = {
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+
+  useEffect(() => {
+    const referrer = document.referrer
+    const utmParams = Object.fromEntries([...searchParams.entries()].filter(([key]) => key.startsWith('utm_')))
+
+    track('page_view', {
+      pathname,
+      referrer,
+      ...utmParams,
+    })
+  }, [pathname])
+
   return (
     <html lang="en" className="scroll-smooth">
-      <body className={`${inter.className} bg-white text-gray-900 antialiased`}>
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="canonical" href="https://yourdomain.com" />
+      </head>
+      <body className="bg-white text-gray-900 antialiased">
+        <a href="#main" className="sr-only focus:not-sr-only absolute top-0 left-0 z-50 p-2 bg-black text-white">Skip to main content</a>
+
         <StickyHeader
           logo="/logo.svg"
           navLinks={[
@@ -37,7 +47,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           cta={{ label: 'Get Started', href: '/signup' }}
         />
 
-        <main className="pt-20 lg:pt-24">
+        <main id="main" className="pt-20 lg:pt-24">
           <div className="mx-auto w-full max-w-7xl px-6 md:px-10 lg:px-20">
             {children}
           </div>
@@ -64,6 +74,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             },
           ]}
         />
+
+        <Toaster position="bottom-center" closeButton richColors />
       </body>
     </html>
   )
