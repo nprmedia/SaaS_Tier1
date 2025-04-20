@@ -10,11 +10,11 @@
  * 📈 ROI Optimization: Trust, scroll behavior, consistent polish
  */
 
-import './globals.css'
+import '@/styles/globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import StickyHeader from '@/src/components/global/StickyHeader'
-import Footer from '@/src/components/global/Footer'
+import StickyHeader from '@/components/global/StickyHeader'
+import Footer from '@/components/global/Footer'
 
 const inter = Inter({ subsets: ['latin'], display: 'swap' })
 

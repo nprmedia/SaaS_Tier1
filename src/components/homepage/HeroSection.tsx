@@ -1,65 +1,38 @@
-// components/HeroSection.tsx (Ultra Tier MAXX Patch – SOP Finalization)
+// components/HeroSection.tsx (with Variant Engine)
 
 'use client'
 
-import { FC, useEffect, useState, useRef, useCallback } from 'react'
+import { FC, useEffect, useState, useRef } from 'react'
 import { motion, useInView, useAnimationControls, useScroll, useTransform } from 'framer-motion'
 import { Button } from '@/components/ui/button'
-import { Info, Flame, Users, X, ShieldCheck, Lock, Star, ArrowRight } from 'lucide-react'
-import { heroContent } from '@/content/homepage/hero'
+import { Info, Flame, Users, X, ArrowRight } from 'lucide-react'
+import { useVariant } from '@/lib/useVariant'
 import { track } from '@/lib/analytics'
 
 const iconMap = {
   flame: <Flame className="h-4 w-4 text-orange-500" />,
 };
 
-const shimmerText = (text: string) => {
-  return (
-    <motion.span
-      whileHover={{ opacity: 1 }}
-      className="inline-block bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent transition-all duration-300 hover:brightness-110"
-    >
-      {text}
-    </motion.span>
-  );
-};
-
-const timeGreeting = () => {
-  const h = new Date().getHours()
-  if (h < 12) return 'Good morning ☀️'
-  if (h < 18) return 'Good afternoon 🌤️'
-  return 'Good evening 🌙'
-}
+const shimmerText = (text: string) => (
+  <motion.span
+    whileHover={{ opacity: 1 }}
+    className="inline-block bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent transition-all duration-300 hover:brightness-110"
+  >
+    {text}
+  </motion.span>
+);
 
 const getNudge = () => {
   const users = ['Maya from NYC', 'Chris from LA', 'Tina from Austin', 'Leo from Miami']
-  const pick = users[Math.floor(Math.random() * users.length)]
-  return `👤 ${pick} just signed up — you're next.`
+  return `👤 ${users[Math.floor(Math.random() * users.length)]} just signed up — you're next.`
 }
 
-const HeroSection: FC<{ isReturningUser?: boolean; location?: string }> = ({
-  isReturningUser = false,
-  location = ''
-}) => {
-  const {
-    headline,
-    subheadline,
-    cta,
-    imageSrc,
-    ribbonText,
-    tooltipText,
-    trustLogos = [],
-    rating = '4.9/5 ⭐️',
-    visitorCount = 128,
-    showForm = false,
-  } = heroContent
-
+const HeroSection: FC = () => {
+  const variant = useVariant('hero')
   const [canScroll, setCanScroll] = useState(false)
-  const [showStickyCTA, setShowStickyCTA] = useState(false)
-  const [dismissSticky, setDismissSticky] = useState(false)
-  const [tooltipVisible, setTooltipVisible] = useState(false)
+  const [showIdleCTA, setShowIdleCTA] = useState(false)
+  const [dismissIdleCTA, setDismissIdleCTA] = useState(false)
   const [nudge, setNudge] = useState('')
-  const [trustEnhanced, setTrustEnhanced] = useState(false)
   const sectionRef = useRef(null)
   const isInView = useInView(sectionRef, { once: true, amount: 0.3 })
   const controls = useAnimationControls()
@@ -67,58 +40,66 @@ const HeroSection: FC<{ isReturningUser?: boolean; location?: string }> = ({
   const yParallax = useTransform(scrollY, [0, 300], [0, -40])
 
   useEffect(() => {
-    document.body.style.overflow = canScroll ? 'auto' : 'hidden'
-    const timeout = setTimeout(() => setCanScroll(true), 1800)
-    return () => clearTimeout(timeout)
+    document.body.style.overflow = canScroll ? 'auto' : 'hidden';
+    const t = setTimeout(() => setCanScroll(true), 1800);
+    return () => clearTimeout(t)
   }, [canScroll])
 
   useEffect(() => {
-    setTimeout(() => {
-      if (window.scrollY > 20) window.scrollTo({ top: 0, behavior: 'smooth' })
-    }, 100)
+    const nudger = setTimeout(() => setNudge(getNudge()), 9000);
+    return () => clearTimeout(nudger);
   }, [])
 
   useEffect(() => {
-    const tip = setTimeout(() => setTooltipVisible(true), 600)
-    const hide = setTimeout(() => setTooltipVisible(false), 3600)
-    const nudgeTimer = setTimeout(() => setNudge(getNudge()), 9000)
-    const trustDelay = setTimeout(() => setTrustEnhanced(true), 3200)
+    let idleTimer: NodeJS.Timeout;
+    const resetIdle = () => {
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(() => setShowIdleCTA(true), 30000);
+    };
+    document.addEventListener('mousemove', resetIdle);
+    document.addEventListener('scroll', resetIdle);
+    document.addEventListener('keydown', resetIdle);
+    resetIdle();
     return () => {
-      clearTimeout(tip)
-      clearTimeout(hide)
-      clearTimeout(nudgeTimer)
-      clearTimeout(trustDelay)
+      document.removeEventListener('mousemove', resetIdle);
+      document.removeEventListener('scroll', resetIdle);
+      document.removeEventListener('keydown', resetIdle);
+      clearTimeout(idleTimer);
     }
   }, [])
-
-  useEffect(() => {
-    document.addEventListener('keydown', (e) => {
-      if (e.key.toLowerCase() === 't') window.location.href = '/pricing'
-      if (e.key === 'Enter') window.location.href = cta.href
-      if (e.key.toLowerCase() === 'd') document.getElementById('demo')?.scrollIntoView({ behavior: 'smooth' })
-    })
-  }, [cta.href])
-
-  useEffect(() => {
-    window.addEventListener('scroll', () => setShowStickyCTA(window.scrollY > 400))
-  }, [])
-
-  useEffect(() => {
-    if (localStorage.getItem('email')) {
-      document.getElementById('hero-email')?.setAttribute('value', localStorage.getItem('email') || '')
-    }
-  }, [])
-
-  const handleCTAClick = () => track('hero_cta_clicked')
-  const handleTooltipHover = () => track('hero_tooltip_hovered')
-
-  const variantHeadline = isReturningUser
-    ? shimmerText(`${timeGreeting()}, welcome back from ${location || 'your city'}.`)
-    : shimmerText(`${timeGreeting()} — ${headline}`)
 
   return (
     <>
-      {/* Enhancements complete. Next: trust badges, shimmer injected, badge ready, full SOP+ done */}
+      <section ref={sectionRef} className="relative isolate overflow-hidden pt-24 pb-24 lg:pt-32 lg:pb-32 bg-gradient-to-b from-white to-gray-50">
+        <div className="mx-auto max-w-7xl px-6 md:px-10 lg:px-20 flex flex-col-reverse md:flex-row items-center justify-between gap-12">
+          <motion.div initial="hidden" animate={isInView ? 'visible' : 'hidden'} variants={{ visible: { transition: { staggerChildren: 0.2 } } }} className="flex flex-col max-w-xl">
+            <motion.h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>{shimmerText(variant.headline)}</motion.h1>
+            <motion.p className="mt-4 text-lg text-gray-600 max-w-md" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>{variant.subheadline}</motion.p>
+            <motion.div className="mt-6" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
+              <Button asChild className="text-base px-6 py-3" onClick={() => track('hero_cta_clicked')}>
+                <a href="#demo">
+                  {variant.ctaLabel} <ArrowRight className="inline w-4 h-4 ml-2" />
+                </a>
+              </Button>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {showIdleCTA && !dismissIdleCTA && (
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 30 }}
+          className="fixed bottom-4 left-1/2 z-50 w-[90%] max-w-md -translate-x-1/2 rounded-xl border bg-white px-5 py-3 shadow-md flex items-center justify-between gap-3"
+        >
+          <span className="text-sm text-gray-700">Still exploring? You can get started in seconds →</span>
+          <Button size="sm" onClick={() => { track('hero_cta_clicked'); window.location.href = '#demo' }}>Get Started</Button>
+          <button onClick={() => setDismissIdleCTA(true)} aria-label="Dismiss CTA" className="p-1 text-gray-500 hover:text-black">
+            <X className="w-4 h-4" />
+          </button>
+        </motion.div>
+      )}
     </>
   )
 }
