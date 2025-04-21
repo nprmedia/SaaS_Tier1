@@ -1,26 +1,29 @@
-// src/content/homepage/hero.ts
+export interface HeroProps {
+  headline: string;
+  subheadline: string;
+  ctaLabel: string;
+  ctaHref: string;
+  tooltipText: string;
+  image: {
+    url: string;
+    alt: string;
+    width: number;
+    height: number;
+  };
+  gamifiedBadge?: string;
+}
 
-export const heroContent = {
-  headline: 'Built to outperform your entire category.',
-  subheadline: 'Launch faster, convert more, and scale smarter — without design bottlenecks.',
-  ribbonText: 'Now booking Q2 builds',
-  tooltipText: 'Backed by 20+ industry conversion studies',
-  imageSrc: '@/images/hero-preview.webp',
-  rating: '4.9/5 ⭐️',
-  visitorCount: 128,
-  trustLogos: [
-    '/logos/shopify.svg',
-    '/logos/notion.svg',
-    '/logos/vercel.svg'
-  ],
-  cta: {
-    label: 'Get Started',
-    href: '/contact',
-    icon: 'flame', // string key for runtime mapping
-    secondary: {
-      label: 'View Pricing',
-      href: '/pricing'
-    }
+export const hero: HeroProps = {
+  headline: 'Automate Reporting. Save 12+ Hours Weekly.',
+  subheadline: 'Built for SaaS teams who want cleaner dashboards and less spreadsheet chaos. Try it free — no card required.',
+  ctaLabel: 'Start Free Trial',
+  ctaHref: '/signup',
+  tooltipText: 'No credit card needed',
+  image: {
+    url: '/flowfield.png',
+    alt: 'Product demo screenshot',
+    width: 800,
+    height: 600,
   },
-  showForm: true
+  gamifiedBadge: '🔥 Most Popular SaaS Tool 2025',
 };

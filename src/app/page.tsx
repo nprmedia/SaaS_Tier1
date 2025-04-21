@@ -1,10 +1,6 @@
-import HeroSection from '@/components/homepage/HeroSection'
-import { Metadata } from 'next'
-
-// ✅ Import other sections here
-// import FeaturesSection from '@/components/FeaturesSection'
-// import PricingSection from '@/components/PricingSection'
-// import TestimonialsSection from '@/components/TestimonialsSection'
+import HeroSection from '@/components/homepage/HeroSection';
+import { hero } from '@/content/homepage/hero';
+import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Launch Faster | Authority Platform',
@@ -28,12 +24,12 @@ export const metadata: Metadata = {
     description: 'Everything founders need to move faster — automation, clarity, and power. Start your growth journey now.',
     images: ['/og-image.png'],
   },
-}
+};
 
 export default function Page() {
   return (
     <main id="main" className="relative min-h-screen bg-white text-gray-900">
-      <HeroSection />
+      <HeroSection {...hero} />
 
       {/* 🔻 Insert additional page sections below */}
       {/* <FeaturesSection /> */}
@@ -41,5 +37,5 @@ export default function Page() {
       {/* <TestimonialsSection /> */}
       {/* <CTASection /> */}
     </main>
-  )
+  );
 }
