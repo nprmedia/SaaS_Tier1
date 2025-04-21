@@ -1,58 +1,48 @@
-// src/components/forms/NewsletterForm.tsx
+'use client'
 
-'use client';
+import { useState } from 'react'
+import { toastPromise } from '@/components/ui/sonner'
 
-import { useForm } from '@/hooks/useForm';
-import { useState } from 'react';
+const NewsletterForm = () => {
+  const [email, setEmail] = useState('')
 
-export default function NewsletterForm() {
-  const { values, handleChange, reset } = useForm({ email: '' });
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setStatus('loading');
+    const formData = new FormData()
+    formData.append('email', email)
 
-    try {
-      const res = await fetch('/api/subscribe', {
+    toastPromise(
+      fetch('/api/subscribe', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: values.email }),
-      });
-
-      if (!res.ok) throw new Error('Failed');
-
-      setStatus('success');
-      reset();
-    } catch {
-      setStatus('error');
-    } finally {
-      setTimeout(() => setStatus('idle'), 3000); // reset message after 3s
-    }
-  };
+        body: formData,
+      }),
+      {
+        loading: 'Subscribing...',
+        success: 'You’re in! Check your inbox.',
+        error: 'Subscription failed. Try again.',
+      }
+    )
+  }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row items-center gap-3">
+    <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3">
       <input
         type="email"
-        name="email"
-        required
-        value={values.email}
-        onChange={handleChange}
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
         placeholder="Enter your email"
-        className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:ring-2 focus:ring-black"
+        required
+        className="rounded-md border px-4 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
       <button
         type="submit"
-        disabled={status === 'loading'}
-        className="whitespace-nowrap rounded-lg bg-black px-5 py-2 text-sm font-medium text-white hover:bg-gray-900 transition disabled:opacity-50"
+        className="rounded-md bg-black px-5 py-2 text-sm font-medium text-white hover:bg-gray-900 transition"
       >
-        {status === 'loading' ? 'Subscribing…' : status === 'success' ? 'Subscribed!' : 'Subscribe'}
+        Join the Waitlist
       </button>
-
-      {status === 'error' && (
-        <p className="text-xs text-red-600 mt-1 sm:ml-2">Something went wrong. Try again.</p>
-      )}
     </form>
-  );
+  )
 }
+
+export default NewsletterForm

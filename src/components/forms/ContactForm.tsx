@@ -1,81 +1,68 @@
-// src/components/forms/ContactForm.tsx
+'use client'
 
-'use client';
+import { useState } from 'react'
+import { toastPromise } from '@/components/ui/sonner'
 
-import { useForm } from '@/hooks/useForm';
-import { useState } from 'react';
+const ContactForm = () => {
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [message, setMessage] = useState('')
 
-export default function ContactForm() {
-  const { values, handleChange, reset } = useForm({
-    name: '',
-    email: '',
-    message: '',
-  });
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
 
-  const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+    const formData = new FormData()
+    formData.append('name', name)
+    formData.append('email', email)
+    formData.append('message', message)
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitting(true);
-
-    try {
-      // Simulated send — replace with real endpoint
-      await new Promise((res) => setTimeout(res, 1200));
-      setSubmitted(true);
-      reset();
-    } catch {
-      alert('Something went wrong.');
-    } finally {
-      setSubmitting(false);
-    }
-  };
+    toastPromise(
+      fetch('/api/contact', {
+        method: 'POST',
+        body: formData,
+      }),
+      {
+        loading: 'Sending your message...',
+        success: 'Message sent! We’ll be in touch shortly.',
+        error: 'Failed to send message. Please try again.',
+      }
+    )
+  }
 
   return (
-    <form onSubmit={handleSubmit} className="grid gap-6">
-      <label className="text-sm font-medium text-gray-800">
-        Full Name
-        <input
-          type="text"
-          name="name"
-          required
-          value={values.name}
-          onChange={handleChange}
-          className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:ring-2 focus:ring-black"
-        />
-      </label>
-
-      <label className="text-sm font-medium text-gray-800">
-        Email Address
-        <input
-          type="email"
-          name="email"
-          required
-          value={values.email}
-          onChange={handleChange}
-          className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:ring-2 focus:ring-black"
-        />
-      </label>
-
-      <label className="text-sm font-medium text-gray-800">
-        Message
-        <textarea
-          name="message"
-          required
-          rows={5}
-          value={values.message}
-          onChange={handleChange}
-          className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:ring-2 focus:ring-black"
-        />
-      </label>
-
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <input
+        type="text"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        placeholder="Your name"
+        required
+        className="rounded-md border px-4 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+      <input
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="Your email"
+        required
+        className="rounded-md border px-4 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+      <textarea
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        placeholder="Your message"
+        rows={5}
+        required
+        className="rounded-md border px-4 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
       <button
         type="submit"
-        disabled={submitting}
-        className="w-full rounded-lg bg-black px-6 py-3 text-sm font-medium text-white hover:bg-gray-900 disabled:opacity-50"
+        className="rounded-md bg-black px-5 py-2 text-sm font-medium text-white hover:bg-gray-900 transition"
       >
-        {submitting ? 'Sending…' : submitted ? 'Sent!' : 'Send Message'}
+        Send Message
       </button>
     </form>
-  );
+  )
 }
+
+export default ContactForm

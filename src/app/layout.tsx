@@ -2,10 +2,8 @@ import '@/styles/globals.css'
 import type { Metadata } from 'next'
 import StickyHeader from '@/components/global/StickyHeader'
 import Footer from '@/components/global/Footer'
-import { Toaster, toast } from '@/components/ui/sonner'
-import { useEffect } from 'react'
-import { usePathname, useSearchParams } from 'next/navigation'
-import { track } from '@/lib/analytics'
+import { Toaster } from '@/components/ui/sonner'
+import { AnalyticsProvider } from '@/components/AnalyticsProvider'
 
 export const metadata: Metadata = {
   title: 'Authority Platform',
@@ -13,20 +11,6 @@ export const metadata: Metadata = {
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
-
-  useEffect(() => {
-    const referrer = document.referrer
-    const utmParams = Object.fromEntries([...searchParams.entries()].filter(([key]) => key.startsWith('utm_')))
-
-    track('page_view', {
-      pathname,
-      referrer,
-      ...utmParams,
-    })
-  }, [pathname])
-
   return (
     <html lang="en" className="scroll-smooth">
       <head>
@@ -76,6 +60,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
 
         <Toaster position="bottom-center" closeButton richColors />
+        <AnalyticsProvider />
       </body>
     </html>
   )

@@ -23,7 +23,8 @@
       "@styles/*": ["styles/*"],
       "@utils/*": ["utils/*"],
       "@hooks/*": ["src/hooks/*"],
-      "@types/*": ["src/types/*"]
+      "@types/*": ["src/types/*"],
+      "@images/*":["src/content/images/*"]
     },
     "plugins": [
       { "name": "next" }

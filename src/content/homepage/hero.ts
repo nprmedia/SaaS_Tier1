@@ -5,7 +5,7 @@ export const heroContent = {
   subheadline: 'Launch faster, convert more, and scale smarter — without design bottlenecks.',
   ribbonText: 'Now booking Q2 builds',
   tooltipText: 'Backed by 20+ industry conversion studies',
-  imageSrc: '/hero-preview.png',
+  imageSrc: '@/images/hero-preview.webp',
   rating: '4.9/5 ⭐️',
   visitorCount: 128,
   trustLogos: [

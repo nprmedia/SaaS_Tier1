@@ -112,7 +112,7 @@ function logVariantEvent(event: string, key: string, variant: string) {
   }).catch(() => {});
 }
 
-export function useVariant<K extends VariantKey>(key: K): VariantMap<K> {
+export function useVariant<K extends VariantKey>(key: K): VariantMap<K> & { markConversion: () => void } {
   const win = typeof window !== 'undefined' ? window : undefined;
   const stored = win?.localStorage.getItem(`${VARIANT_STORAGE_PREFIX}${key}`) as VariantName<K> | null;
   const variant: VariantName<K> = stored && variants[key][stored]
@@ -127,7 +127,10 @@ export function useVariant<K extends VariantKey>(key: K): VariantMap<K> {
     logVariantEvent('seen', key, variant);
   }
 
-  return variants[key][variant];
+  return {
+    ...variants[key][variant],
+    markConversion: () => trackVariantConversion(key)
+  };
 }
 
 export function trackVariantClick<K extends VariantKey>(key: K) {
