@@ -20,7 +20,7 @@ export const hero: HeroProps = {
   ctaHref: '/signup',
   tooltipText: 'No credit card needed',
   image: {
-    url: '/flowfield.png',
+    url: '/hero-preview.webp',
     alt: 'Product demo screenshot',
     width: 800,
     height: 600,

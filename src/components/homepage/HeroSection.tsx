@@ -3,7 +3,7 @@
 import { motion, useReducedMotion } from 'framer-motion';
 import Image from 'next/image';
 import { HeroProps } from '@/content/homepage/hero';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function HeroSection({
   headline,
@@ -16,7 +16,6 @@ export default function HeroSection({
 }: HeroProps) {
   const prefersReducedMotion = useReducedMotion();
   const [canScroll, setCanScroll] = useState(false);
-  const animationContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const timer = setTimeout(() => setCanScroll(true), 1200);
@@ -31,81 +30,81 @@ export default function HeroSection({
     if (canScroll) document.body.style.overflow = '';
   }, [canScroll]);
 
-  useEffect(() => {
-    if (!animationContainerRef.current) return;
-
-    const script = document.createElement('script');
-    script.src = '/black-sand-flow-field/script.js';
-    script.async = true;
-    animationContainerRef.current.appendChild(script);
-
-    return () => {
-      animationContainerRef.current?.removeChild(script);
-    };
-  }, []);
-
   return (
-    <section
-      className="relative flex flex-col-reverse lg:flex-row items-center justify-between px-6 lg:py-32 py-20 max-w-[1200px] mx-auto min-h-[80vh] overflow-hidden"
-      aria-labelledby="hero-heading"
-    >
-      {/* Black Sand Animated Background */}
-      <div
-        ref={animationContainerRef}
-        className="absolute inset-0 z-0 pointer-events-none"
-        aria-hidden="true"
-      />
-      <div className="absolute inset-0 z-0 bg-black/30" aria-hidden="true" />
+    <section className="w-full min-h-screen flex flex-col-reverse lg:flex-row items-center justify-between gap-12 px-6 py-24 lg:py-32">
+      {/* Background */}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden" aria-hidden="true">
+        <iframe
+          src="/sand-flow-corrected.html"
+          referrerPolicy="origin"
+          className="w-full h-full border-0 opacity-30 mix-blend-darken"
+          loading="lazy"
+          allowFullScreen
+          title="Sand Flow Field"
+        />
+      </div>
 
       {/* Left Text Content */}
-      <div className="relative z-10 flex flex-col max-w-xl text-left">
+      <div className="relative z-10 flex flex-col max-w-xl text-left space-y-5">
         {gamifiedBadge && (
-          <span className="mb-4 inline-block bg-gradient-to-r from-amber-500 to-pink-500 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-lg">
+          <span className="inline-block bg-gradient-to-r from-yellow-400 to-pink-500 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-md animate-pulse">
             {gamifiedBadge}
           </span>
         )}
         <motion.h1
           id="hero-heading"
-          className="text-4xl lg:text-5xl font-bold leading-tight mb-4 text-gray-900 dark:text-white max-w-prose drop-shadow-md"
-          initial={{ opacity: 0, y: -20 }}
+          className="text-4xl lg:text-6xl font-extrabold leading-tight text-black tracking-tight drop-shadow-lg"
+          initial={{ opacity: 0, y: -30 }}
           animate={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
         >
           {headline} <span className="inline-block text-indigo-500">⚡</span>
         </motion.h1>
         <motion.p
-          className="text-base lg:text-lg text-gray-600 dark:text-gray-300 mb-6 max-w-md"
+          className="text-lg lg:text-xl text-gray-700 max-w-md"
           initial={{ opacity: 0, y: -20 }}
           animate={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
         >
           {subheadline}
         </motion.p>
-        <motion.a
-          href={ctaHref}
-          className="inline-flex items-center gap-2 bg-indigo-600 text-white px-6 py-3 rounded-xl text-sm font-semibold shadow-lg hover:bg-indigo-700 transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          initial={{ opacity: 0, y: -20 }}
-          animate={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
-        >
-          {ctaLabel}
-          <span className="text-xs opacity-75 ml-2">{tooltipText}</span>
-        </motion.a>
+        <div className="flex flex-col sm:flex-row gap-4 pt-2">
+          <motion.a
+            href={ctaHref}
+            className="inline-flex items-center gap-2 bg-indigo-600 text-white px-6 py-3 rounded-lg text-base font-semibold shadow-md hover:bg-indigo-700 transition-transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            initial={{ opacity: 0, y: -20 }}
+            animate={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
+            transition={{ delay: 0.6 }}
+          >
+            {ctaLabel}
+            <span className="text-xs opacity-75 ml-2">{tooltipText}</span>
+            <span className="ml-1">→</span>
+          </motion.a>
+          <motion.a
+            href="#contact"
+            className="inline-flex items-center gap-2 bg-white text-indigo-600 border border-indigo-300 px-6 py-3 rounded-lg text-base font-semibold shadow-sm hover:bg-indigo-50 transition"
+            initial={{ opacity: 0, y: -20 }}
+            animate={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
+            transition={{ delay: 0.7 }}
+          >
+            Talk to Sales
+          </motion.a>
+        </div>
         <motion.div
-          className="mt-6 animate-bounce w-fit"
+          className="pt-8"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.8 }}
+          transition={{ delay: 0.9 }}
         >
-          <span className="text-gray-500 dark:text-gray-400 text-sm">↓ Scroll</span>
+          <span className="text-gray-500 text-sm animate-bounce">↓ Scroll</span>
         </motion.div>
       </div>
 
       {/* Right Side Visual */}
       {image?.url && (
         <motion.div
-          className="relative z-10 w-full max-w-md lg:max-w-lg order-[-1] lg:order-none"
-          initial={{ opacity: 0, y: 20 }}
+          className="relative z-10 w-full max-w-md lg:max-w-lg"
+          initial={{ opacity: 0, y: 30 }}
           animate={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
           transition={{ delay: 0.8 }}
         >
@@ -114,7 +113,7 @@ export default function HeroSection({
             alt={image.alt || 'Hero image'}
             width={image.width || 800}
             height={image.height || 600}
-            className="rounded-xl shadow-xl"
+            className="rounded-xl shadow-2xl hover:scale-[1.01] transition-transform"
             sizes="(max-width: 768px) 100vw, 50vw"
             priority
           />
