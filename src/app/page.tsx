@@ -28,7 +28,7 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <main id="main" className="relative min-h-screen bg-white text-gray-900">
+    <main id="main" className="relative min-h-screen">
       <HeroSection {...hero} />
 
       {/* 🔻 Insert additional page sections below */}

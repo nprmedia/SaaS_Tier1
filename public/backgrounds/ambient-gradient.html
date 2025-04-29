@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Ambient Gradient Background</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background: radial-gradient(circle at center, #d6e4ff, #f0f4ff, #fdfcff);
+      }
+      canvas {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="bg"></canvas>
+    <script>
+      const canvas = document.getElementById('bg');
+      const ctx = canvas.getContext('2d');
+      let width, height, particles;
+
+      const resize = () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      };
+
+      window.addEventListener('resize', resize);
+      resize();
+
+      class Particle {
+        constructor() {
+          this.reset();
+        }
+
+        reset() {
+          this.x = Math.random() * width;
+          this.y = Math.random() * height;
+          this.radius = Math.random() * 1.5 + 0.5;
+          this.alpha = Math.random() * 0.4 + 0.1;
+          this.speed = Math.random() * 0.2 + 0.05;
+          this.direction = Math.random() * 2 * Math.PI;
+        }
+
+        update() {
+          this.x += Math.cos(this.direction) * this.speed;
+          this.y += Math.sin(this.direction) * this.speed;
+
+          if (
+            this.x < -10 ||
+            this.x > width + 10 ||
+            this.y < -10 ||
+            this.y > height + 10
+          ) {
+            this.reset();
+          }
+        }
+
+        draw() {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(100, 100, 255, ${this.alpha})`;
+          ctx.fill();
+        }
+      }
+
+      function initParticles(count) {
+        particles = Array.from({ length: count }, () => new Particle());
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, width, height);
+        particles.forEach((p) => {
+          p.update();
+          p.draw();
+        });
+        requestAnimationFrame(animate);
+      }
+
+      initParticles(80);
+      animate();
+    </script>
+  </body>
+</html>

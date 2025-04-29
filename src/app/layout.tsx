@@ -19,7 +19,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="canonical" href="https://yourdomain.com" />
       </head>
       <body className="bg-white text-gray-900 antialiased">
-        <a href="#main" className="sr-only focus:not-sr-only absolute top-0 left-0 z-50 p-2 bg-black text-white">Skip to main content</a>
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only absolute top-0 left-0 z-50 p-2 bg-black text-white"
+        >
+          Skip to main content
+        </a>
 
         <StickyHeader
           logo="/logo.svg"
@@ -32,15 +37,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
 
         <main id="main" className="pt-20 lg:pt-24">
-          <div className="mx-auto w-full max-w-7xl px-6 md:px-10 lg:px-20">
-            {children}
-          </div>
+          <div className="w-full">{children}</div>
         </main>
 
         <Footer
           logo="/logo.svg"
           legal="© 2025 Authority Platform. All rights reserved."
-          contact={{ label: 'hello@authority.io', href: 'mailto:hello@authority.io' }}
+          contact={{
+            label: 'hello@authority.io',
+            href: 'mailto:hello@authority.io',
+          }}
           navGroups={[
             {
               heading: 'Product',
