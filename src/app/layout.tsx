@@ -1,73 +1,54 @@
-import '@/styles/globals.css'
-import type { Metadata } from 'next'
-import StickyHeader from '@/components/global/StickyHeader'
-import Footer from '@/components/global/Footer'
-import { Toaster } from '@/components/ui/sonner'
-import { AnalyticsProvider } from '@/components/AnalyticsProvider'
+// 📜 layout.tsx
+// Institutional Layout with Dynamic Metadata Generation
 
-export const metadata: Metadata = {
-  title: 'Authority Platform',
-  description: 'Enterprise-grade automation, web, and strategy platform.',
-}
+import '../styles/globals.css';
+import { Inter } from 'next/font/google';
+import { theme } from '@/config/theme';
+import Head from 'next/head';
+import { generateMetadata } from '@/lib/metadata';
+
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
+
+// Dynamically generated SEO Metadata
+const metadata = generateMetadata({
+  title: 'Your Site Title',
+  description: 'Your site description here',
+  url: 'https://your-site-url.com',
+  image: '/default-og-image.webp',
+});
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="scroll-smooth">
-      <head>
+    <html lang="en" className={`${inter.variable}`}>
+      <Head>
+        {/* 🎯 Preload Fonts */}
+        <link rel="preload" href="/fonts/inter-latin.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+
+        {/* 🎯 Preload Hero Image */}
+        <link rel="preload" href="/your-hero-image-path.webp" as="image" />
+
+        {/* 🎯 Dynamic SEO Metadata */}
+        <title>{metadata.title}</title>
+        <meta name="description" content={metadata.description} />
+        <meta property="og:title" content={metadata.openGraph.title} />
+        <meta property="og:description" content={metadata.openGraph.description} />
+        <meta property="og:image" content={metadata.openGraph.images[0].url} />
+        <meta property="og:type" content={metadata.openGraph.type} />
+        <meta property="og:url" content={metadata.openGraph.url} />
+        <meta name="twitter:card" content={metadata.twitter.card} />
+        <meta name="twitter:title" content={metadata.twitter.title} />
+        <meta name="twitter:description" content={metadata.twitter.description} />
+        <meta name="twitter:image" content={metadata.twitter.images[0]} />
+
+        {/* 🎯 Browser/Device Optimization */}
+        <meta name="theme-color" content={theme.colors.background} />
+        <meta name="color-scheme" content="light dark" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-        <link rel="canonical" href="https://yourdomain.com" />
-      </head>
-      <body className="bg-white text-gray-900 antialiased">
-        <a
-          href="#main"
-          className="sr-only focus:not-sr-only absolute top-0 left-0 z-50 p-2 bg-black text-white"
-        >
-          Skip to main content
-        </a>
-
-        <StickyHeader
-          logo="/logo.svg"
-          navLinks={[
-            { label: 'Features', href: '#features' },
-            { label: 'Pricing', href: '#pricing' },
-            { label: 'Contact', href: '#contact' },
-          ]}
-          cta={{ label: 'Get Started', href: '/signup' }}
-        />
-
-        <main id="main" className="pt-20 lg:pt-24">
-          <div className="w-full">{children}</div>
-        </main>
-
-        <Footer
-          logo="/logo.svg"
-          legal="© 2025 Authority Platform. All rights reserved."
-          contact={{
-            label: 'hello@authority.io',
-            href: 'mailto:hello@authority.io',
-          }}
-          navGroups={[
-            {
-              heading: 'Product',
-              links: [
-                { label: 'Features', href: '#' },
-                { label: 'Pricing', href: '#' },
-              ],
-            },
-            {
-              heading: 'Company',
-              links: [
-                { label: 'About', href: '#' },
-                { label: 'Careers', href: '#' },
-              ],
-            },
-          ]}
-        />
-
-        <Toaster position="bottom-center" closeButton richColors />
-        <AnalyticsProvider />
+        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+      </Head>
+      <body className="min-h-screen bg-background text-foreground antialiased selection:bg-primary/20">
+        {children}
       </body>
     </html>
-  )
+  );
 }
