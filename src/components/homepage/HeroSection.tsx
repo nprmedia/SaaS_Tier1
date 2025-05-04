@@ -24,7 +24,7 @@ export default function HeroSection({ headline, subheadline, ctaText, ctaLink, i
           )}
           {ctaText && ctaLink && (
             <Link
-              href={{ pathname: ctaLink }}
+              href={{pathname: ctaLink}}
               className="inline-flex items-center justify-center px-6 py-3 text-lg font-semibold rounded-full bg-primary text-white hover:bg-opacity-90 transition"
             >
               {ctaText}

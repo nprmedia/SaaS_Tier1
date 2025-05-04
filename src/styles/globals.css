@@ -1,9 +1,8 @@
-/* 🌐 Tailwind Base */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* 📜 globals.css — Cleaned for Tier 1 SOP */
+/* 📜 globals.css — Tier 1 SOP Foundation */
 
 /* 🌌 Background Utility Classes */
 .bg-orbital {
