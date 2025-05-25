@@ -1,5 +1,0 @@
-husky
-eslint
-prettier
-vitest
-playwright
