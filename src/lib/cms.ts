@@ -2,7 +2,7 @@
 
 import { navLinks } from '@/content/nav-links';
 import { homepageFeatures } from '@/content/homepage/features';
-import { pricingTiers } from '@/content/homepage/pricing';
+import { pricingTiers } from '@/content/homepage/feature';
 import { templatePreviews } from '@/content/homepage/testimonials';
 
 import fs from 'fs/promises';

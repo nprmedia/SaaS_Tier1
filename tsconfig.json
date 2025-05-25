@@ -20,9 +20,9 @@
       "@app/*": ["app/*"],
       "@components/*": ["src/components/*"],
       "@lib/*": ["src/lib/*"],
-      "@styles/*": ["styles/*"],
+      "@styles/*": ["src/styles/*"],
       "@utils/*": ["utils/*"],
-      "@hooks/*": ["src/hooks/*"],
+      "@hooks/*": ["src/lib/hooks/*"],
       "@types/*": ["src/types/*"],
       "@images/*":["src/content/images/*"]
     },

@@ -1,22 +1,20 @@
-// components/ui/card.tsx
+import { cn } from '@/styles/utils'
+import { HTMLAttributes, forwardRef } from 'react'
 
-import { cn } from '@/lib/utils';
-import { ReactNode } from 'react';
+interface CardProps extends HTMLAttributes<HTMLDivElement> {}
 
-interface CardProps {
-  children: ReactNode;
-  className?: string;
-}
+export const Card = forwardRef<HTMLDivElement, CardProps>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn('rounded-xl border border-border shadow-sm', className)}
+    {...props}
+  />
+))
+Card.displayName = 'Card'
 
-export function Card({ children, className }: CardProps) {
-  return (
-    <div
-      className={cn(
-        'rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-md',
-        className
-      )}
-    >
-      {children}
-    </div>
-  );
-}
+export const CardContent = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
+  ({ className, ...props }, ref) => (
+    <div ref={ref} className={cn('p-4', className)} {...props} />
+  )
+)
+CardContent.displayName = 'CardContent'

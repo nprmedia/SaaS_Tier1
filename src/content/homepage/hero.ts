@@ -19,7 +19,7 @@ export const hero: HeroProps = {
   ctaText: 'Start Free Trial',
   ctaLink: '/signup',
   image: {
-    url: '/hero-preview.webp',
+    url: '/hero-preview.png',
     alt: 'Product demo screenshot',
     width: 800,
     height: 600,

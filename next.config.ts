@@ -1,15 +1,10 @@
-// next.config.js
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
-  swcMinify: true,
-  images: {
-    domains: ['yourcdn.com'], // <-- add CMS/image host domains here
-  },
   experimental: {
-    serverActions: true,
-    typedRoutes: true,
+    serverActions: {}, // ✅ empty object if unused
   },
-}
+  // ❌ remove `swcMinify`, it's deprecated in Next 14+
+  reactStrictMode: true,
+};
 
-module.exports = nextConfig
+export default nextConfig;

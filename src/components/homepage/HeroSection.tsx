@@ -1,50 +1,221 @@
 'use client';
 
-import { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import type { HeroProps } from '@/content/homepage/hero';
+import { useSearchParams } from 'next/navigation';
+import { motion, useAnimation, useReducedMotion } from 'framer-motion';
+import { useParticleBackground } from '@/lib/hooks/useParticleBackground';
+import { useHeroAnalytics } from '@/lib/hooks/useHeroAnalytics';
+import BeamOfLight from '@/components/BeamOfLight';
 
-export default function HeroSection({ headline, subheadline, ctaText, ctaLink, image }: HeroProps) {
+interface HeroProps {
+  headline: string;
+  subheadline?: string;
+  ctaText?: string;
+  ctaLink?: string;
+  image?: {
+    url: string;
+    alt?: string;
+    width?: number;
+    height?: number;
+  };
+}
+
+
+const HeroSection: React.FC<HeroProps> = ({ headline, subheadline, ctaText, ctaLink, image }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const parallaxRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLElement>(null);
+  const ctaRef = useRef<HTMLAnchorElement>(null);
+
+  const searchParams = useSearchParams();
+  const controls = useAnimation();
+  const prefersReducedMotion = useReducedMotion();
+
+  const [isFrozen, setIsFrozen] = useState(true);
+  const [isStickyVisible, setIsStickyVisible] = useState(false);
+  const [modifiedCTA, setModifiedCTA] = useState(false);
+  const [personalizedHeadline, setPersonalizedHeadline] = useState('');
+  const [greeting, setGreeting] = useState('');
+  const [regionImageUrl, setRegionImageUrl] = useState<string | null>(null);
+
+  useParticleBackground(containerRef);
+  useHeroAnalytics({ heroRef, ctaRef });
+
+  useEffect(() => {
+    const hour = new Date().getHours();
+    setGreeting(hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening');
+  }, []);
+
+  useEffect(() => {
+    const storedHeadline = localStorage.getItem('hero_headline_variant');
+    if (storedHeadline) {
+      setPersonalizedHeadline(storedHeadline);
+      return;
+    }
+
+    const campaign = searchParams.get('utm_campaign');
+    if (campaign === 'launch2025') {
+      setPersonalizedHeadline('Supercharge your launch in 30 days');
+      localStorage.setItem('hero_headline_variant', 'Supercharge your launch in 30 days');
+    } else if (campaign === 'founders') {
+      setPersonalizedHeadline('Built exclusively for startup founders');
+      localStorage.setItem('hero_headline_variant', 'Built exclusively for startup founders');
+    }
+
+    const locale = navigator.language || '';
+    setRegionImageUrl(locale.includes('de') || locale.includes('fr') ? '/images/ui-eu.png' : '/images/ui-us.png');
+
+    const email = localStorage.getItem('user_email');
+    if (email && email.includes('@bigco.com')) {
+      setPersonalizedHeadline('The #1 platform for enterprise teams like BigCo');
+    }
+  }, [searchParams]);
+
+useEffect(() => {
+  if (prefersReducedMotion) return;
+
+  const original = document.body.style.overflow;
+  document.body.style.overflow = 'hidden';
+
+  controls.start('visible').then(() => {
+    document.body.style.overflow = original;
+    setIsFrozen(false);
+  });
+
+  return () => {
+    document.body.style.overflow = original; // ✅ clean up always
+  };
+}, [controls, prefersReducedMotion]);
+
+  useEffect(() => {
+    if (!parallaxRef.current || prefersReducedMotion) return;
+    const handleScroll = () => {
+      const offset = window.scrollY;
+      if (parallaxRef.current) {
+        const translateY = offset * -0.1;
+        const blurAmount = Math.min(offset * 0.03, 12);
+        parallaxRef.current.style.transform = `translateY(${translateY}px)`;
+        parallaxRef.current.style.filter = `blur(${blurAmount}px) brightness(1.1)`;
+      }
+      if (offset > 300 && !modifiedCTA) setModifiedCTA(true);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [modifiedCTA, prefersReducedMotion]);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    const onScroll = () => {
+      setIsStickyVisible(false);
+      clearTimeout(timer);
+      timer = setTimeout(() => setIsStickyVisible(true), 30000);
+    };
+    window.addEventListener('scroll', onScroll);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('scroll', onScroll);
+    };
+  }, []);
+
+  const textVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: (i: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: { delay: i * 0.2, duration: 0.6 },
+    }),
+  };
 
   return (
     <section
+      id="hero"
       ref={heroRef}
       aria-label="Hero Section"
-      className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-bgStart via-primary to-bgEnd text-textDark"
+      className={`relative isolate overflow-hidden min-h-screen flex items-center justify-center bg-gradient-depth animate-gradient-slow text-textDark font-sans ${isFrozen ? 'overflow-hidden' : ''}`}
     >
-      <div className="max-w-7xl w-full mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+      <div ref={containerRef} className="absolute inset-0 w-full h-full z-[3] pointer-events-none" />
+
+      <div className="absolute w-full h-full overflow-hidden z-0">
+        <div className="relative w-full h-full">
+          <Image src="/images/mountain.jpg" alt="Snowy mountain backdrop" fill priority className="object-cover object-left-top opacity-60" style={{ objectPosition: 'left 30%' }} />
+        </div>
+        <div className="absolute bottom-0 left-0 w-full h-[60px] bg-white/10 blur-2xl z-[2]" />
+      </div>
+
+      <div className="absolute left-0 top-0 h-full w-1/2 z-[4] pointer-events-none">
+        <div className="h-full w-full bg-gradient-to-r from-white via-white/90 to-transparent" />
+      </div>
+      <div className="absolute inset-0 z-[5] pointer-events-none" style={{ background: 'linear-gradient(135deg, rgba(0, 170, 255, 0.25), rgba(255,220,180,0.05))' }} />
+
+      <motion.div className="relative z-10 max-w-7xl w-full mx-auto px-6 py-20 grid grid-cols-1 md:grid-cols-2 gap-12 items-center" initial="hidden" animate={controls}>
         <div>
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">
-            <span className="mr-2">🚀</span>{headline}
-          </h1>
+          <motion.div variants={textVariants} custom={0} className="text-sm text-muted mb-1">
+            {greeting}
+          </motion.div>
+          <motion.h1 variants={textVariants} custom={1} className="text-[clamp(2.2rem,5vw,4rem)] font-extrabold tracking-tight leading-tight mb-6">
+            <span className="mr-2" role="img" aria-label="rocket"></span>{personalizedHeadline || headline}
+          </motion.h1>
           {subheadline && (
-            <p className="text-lg md:text-xl text-textLight mb-6">{subheadline}</p>
+            <motion.p variants={textVariants} custom={1.5} className="text-[clamp(1rem,2vw,1.25rem)] text-textLight mb-6 max-w-xl">
+              {subheadline}
+            </motion.p>
           )}
           {ctaText && ctaLink && (
-            <Link
-              href={{pathname: ctaLink}}
-              className="inline-flex items-center justify-center px-6 py-3 text-lg font-semibold rounded-full bg-primary text-white hover:bg-opacity-90 transition"
-            >
-              {ctaText}
-            </Link>
+            <motion.div variants={textVariants} custom={2} className="relative group inline-block">
+              <div className="absolute -inset-2 rounded-full bg-primary/20 blur-2xl opacity-40 animate-pulse z-[-1]" />
+              <Link ref={ctaRef} href={{ pathname: ctaLink }} className={`inline-flex items-center justify-center px-6 py-3 text-lg font-semibold rounded-full transition shadow-lg ring-1 ${modifiedCTA ? 'bg-accent text-black' : 'bg-primary text-black'}`}>
+                {modifiedCTA ? 'Claim My Free Trial' : ctaText}
+              </Link>
+              <div className="absolute left-0 top-full mt-2 text-sm text-muted opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                No card required. Cancel anytime.
+              </div>
+            </motion.div>
           )}
-        </div>
-
-        {image?.url && (
-          <div className="relative w-full max-w-md mx-auto">
-            <Image
-              src={image.url}
-              alt={image.alt || 'Hero image'}
-              width={image.width || 600}
-              height={image.height || 600}
-              priority
-              className="object-contain w-full h-auto"
-            />
+          <div className="mt-6 text-xs text-muted">SOC2 Certified • GDPR Ready • Trusted by 10,000+ users</div>
+          <div className="mt-2 flex items-center gap-4 text-xs text-muted">
           </div>
+        </div>
+      </motion.div>
+
+      <motion.div variants={textVariants} custom={2.5} className="absolute z-30 group" style={{ bottom: '35%', left: '54%', width: '700px', transform: 'perspective(1000px) rotateX(0.3deg) rotateY(-0.8deg) rotate(-1deg)', filter: 'contrast(0.85) brightness(1.05)', transition: 'transform 0.4s ease' }}>
+        <div className="relative rounded-xl">
+          {image && (
+          <Image
+            src={image.url}
+            alt={image.alt || 'Product Screenshot'}
+            width={image.width || 480}
+            height={image.height || 480}
+            className="rounded-xl shadow-2xl"
+            priority
+          />
         )}
+          <div className="absolute top-0 left-0 w-full h-full pointer-events-none rounded-xl" style={{ background: 'linear-gradient(270deg, rgba(0, 0, 0, 0.15), transparent 60%)' }} />
+        </div>
+      </motion.div>
+
+      <BeamOfLight />
+
+      <div className="absolute bottom-20 w-full px-6">
+        <div className="flex justify-center gap-6 opacity-70 grayscale">
+          <Image src="/logos/stripe.svg" alt="Stripe" width={80} height={24} />
+          <Image src="/logos/slack.svg" alt="Slack" width={80} height={24} />
+          <Image src="/logos/notion.svg" alt="Notion" width={80} height={24} />
+        </div>
       </div>
+
+      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-10">
+        <div className="animate-bounce text-primary text-2xl drop-shadow-[0_0_6px_rgba(255,255,255,0.6)]">↓</div>
+      </div>
+
+      {isStickyVisible && (
+        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 bg-primary text-white px-6 py-2 rounded-full shadow-xl text-sm z-50">
+          Still thinking? Start your free trial now →
+        </div>
+      )}
     </section>
   );
-}
+};
+
+export default HeroSection;

@@ -1,57 +1,38 @@
-// src/app/(auth)/login/page.tsx
 'use client';
 
-import { useState } from 'react';
-import Link from 'next/link';
+import { useSession } from '@/lib/providers/SessionProvider';
+import { useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function LoginPage() {
-  const [loading, setLoading] = useState(false);
+  const { isLoggedIn, login } = useSession();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get('redirect') || '/dashboard';
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLoading(true);
-    // Insert real login logic here
-    setTimeout(() => setLoading(false), 1200);
-  };
+  useEffect(() => {
+    if (isLoggedIn) {
+      console.log('🚀 Redirecting after login');
+      router.replace(redirectTo);
+    }
+  }, [isLoggedIn, redirectTo]);
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="grid gap-4">
-        <label className="text-sm font-medium text-gray-800">
-          Email
-          <input
-            type="email"
-            required
-            placeholder="you@example.com"
-            className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black"
-          />
-        </label>
-
-        <label className="text-sm font-medium text-gray-800">
-          Password
-          <input
-            type="password"
-            required
-            placeholder="••••••••"
-            className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black"
-          />
-        </label>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="bg-white shadow-lg rounded-xl p-8 max-w-md w-full space-y-6 text-center">
+        <h1 className="text-2xl font-bold">Log In</h1>
+        <p className="text-sm text-neutral-600">No credentials needed — this is a demo session.</p>
+        <button
+          onClick={() => {
+            login();
+            // 🔁 optional: push here too, fallback is in useEffect
+            // router.push(redirectTo);
+          }}
+          className="bg-black text-white px-6 py-2 rounded-md hover:bg-neutral-800 transition"
+        >
+          Enter Demo Dashboard
+        </button>
       </div>
-
-      <button
-        type="submit"
-        disabled={loading}
-        className="w-full rounded-lg bg-black px-6 py-3 text-sm font-medium text-white transition hover:bg-gray-900 disabled:opacity-50"
-      >
-        {loading ? 'Signing in…' : 'Sign In'}
-      </button>
-
-      <p className="text-center text-sm text-gray-500">
-        Don’t have an account?{' '}
-        <Link href="/register" className="underline hover:text-black">
-          Register
-        </Link>
-      </p>
-    </form>
+    </div>
   );
 }
