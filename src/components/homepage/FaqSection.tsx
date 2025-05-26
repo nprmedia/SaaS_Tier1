@@ -15,7 +15,7 @@ export default function FaqSection() {
   return (
     <section 
     id="faq"
-    className="relative w-full px-4 py-24 sm:px-8 bg-gradient-to-b from-[#edf6fd] to-[#ffffff] text-black overflow-hidden">
+    className="relative w-full px-4 py-24 sm:px-8 bg-gradient-to-b from-[#edf6fd] to-[#bde2f8] text-black overflow-hidden">
       
       <div className="absolute -top-40 left-1/2 h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-gradient-to-br from-white via-[#bde2f8] to-transparent opacity-30 blur-3xl animate-pulse z-0" />
 

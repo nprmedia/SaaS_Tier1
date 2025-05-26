@@ -9,7 +9,6 @@ export default function CtaSection() {
     id="cta"
     className="relative w-full px-4 py-24 sm:px-8 bg-gradient-to-b from-[#bde2f8] to-[#edf6fd] text-black text-center overflow-hidden">
       {/* Background Moonlight Beam Gradient */}
-      <div className="absolute -top-40 left-1/2 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-gradient-to-br from-white via-[#bde2f8] to-transparent opacity-40 blur-3xl animate-pulse z-0" />
 
       <motion.div
         className="relative mx-auto max-w-3xl z-10"
@@ -19,7 +18,7 @@ export default function CtaSection() {
         transition={{ duration: 0.7, ease: "easeOut" }}
       >
         <motion.h2
-          className="text-3xl sm:text-4xl font-bold mb-4"
+          className="text-3xl sm:text-4xl font-extrabold mb-4 text-green-400 animate-pulse"
           initial={{ opacity: 0, x: -50 }}
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.2, duration: 0.6 }}

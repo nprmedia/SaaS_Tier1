@@ -26,7 +26,7 @@ export default function StickyHeader() {
           : 'bg-transparent backdrop-blur-0'
       } text-black`}
     >
-      <div className="mx-auto max-w-7xl px-6 md:px-10 lg:px-20 flex items-center justify-between h-20">
+      <div className="mx-auto w-full px-3 md:px-10 lg:px-60 flex items-center bg-white justify-between h-20">
         <Link href="/" className="text-xl font-bold tracking-tight hover:scale-105 transition-transform">
           Authority Platform
         </Link>

@@ -1,40 +1,82 @@
-// src/app/(legal)/privacy/page.tsx
-export default function PrivacyPolicyPage() {
-    return (
-      <section className="px-6 py-20 md:px-12 lg:px-32 max-w-4xl mx-auto space-y-10 text-sm text-gray-700">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Privacy Policy</h1>
-          <p className="mt-2 text-gray-500">Effective Date: April 2025</p>
-        </div>
-  
-        <div className="space-y-6">
+import { Metadata } from 'next';
+import StickyHeader from '@/components/global/StickyHeader';
+
+export const metadata: Metadata = {
+  title: 'Privacy Policy | Your SaaS Name',
+  description: 'Learn how we collect, use, and protect your data.',
+};
+
+export default function PrivacyPage() {
+  return (
+    <div className="dark:bg-white dark:text-black">
+      <StickyHeader/>
+      <main className="max-w-3xl pt-20 px-6 py-16 mx-auto text-sm leading-7 text-black">
+        <h1 className="text-3xl font-bold mb-6">Privacy Policy</h1>
+        <p className="mb-4">Last updated: [Month Day, Year]</p>
+
+        <section className="mb-10">
+          <h2 className="text-xl font-semibold mb-2">1. Information We Collect</h2>
           <p>
-            NPR Media is committed to protecting your privacy. This policy explains what information we collect, how we use it, and your rights regarding your personal data.
+            We collect personal information that you provide to us when signing up, including your name, email address, and payment information. We may also collect usage data such as IP addresses, browser type, and pages visited.
           </p>
-  
-          <div>
-            <h2 className="text-lg font-semibold">1. Information We Collect</h2>
-            <p>We collect information you provide directly (like email), technical data (like browser/device), and usage data (like page interactions).</p>
-          </div>
-  
-          <div>
-            <h2 className="text-lg font-semibold">2. How We Use Your Information</h2>
-            <p>Your data helps us operate, improve our services, and communicate effectively with you.</p>
-          </div>
-  
-          <div>
-            <h2 className="text-lg font-semibold">3. Data Sharing & Retention</h2>
-            <p>We never sell your data. We only share with trusted tools used to run our platform. We retain data only as long as necessary.</p>
-          </div>
-  
-          <div>
-            <h2 className="text-lg font-semibold">4. Your Rights</h2>
-            <p>You can request access, correction, or deletion of your data at any time by contacting us at team@npr-media.com.</p>
-          </div>
-  
-          <p className="text-xs text-gray-400">Questions? Reach us at team@npr-media.com.</p>
-        </div>
-      </section>
-    );
-  }
-  
+        </section>
+
+        <section className="mb-10">
+          <h2 className="text-xl font-semibold mb-2">2. How We Use Your Information</h2>
+          <p>
+            Your data is used to provide and improve our services, process payments, communicate with you, and ensure platform security. We do not sell your personal information.
+          </p>
+        </section>
+
+        <section className="mb-10">
+          <h2 className="text-xl font-semibold mb-2">3. Data Retention</h2>
+          <p>
+            We retain your information only as long as necessary to fulfill the purposes outlined in this policy or as required by law.
+          </p>
+        </section>
+
+        <section className="mb-10">
+          <h2 className="text-xl font-semibold mb-2">4. Cookies & Tracking</h2>
+          <p>
+            Our site uses cookies and similar technologies to improve user experience, analyze site traffic, and for remarketing purposes. You can manage cookie preferences through your browser settings.
+          </p>
+        </section>
+
+        <section className="mb-10">
+          <h2 className="text-xl font-semibold mb-2">5. Third-Party Services</h2>
+          <p>
+            We use third-party services like [e.g., Stripe, Google Analytics] to operate our business. These providers may have access to your personal data only to perform tasks on our behalf.
+          </p>
+        </section>
+
+        <section className="mb-10">
+          <h2 className="text-xl font-semibold mb-2">6. Your Rights</h2>
+          <p>
+            You have the right to access, update, or delete your data. If you wish to exercise these rights, please contact us at [email address].
+          </p>
+        </section>
+
+        <section className="mb-10">
+          <h2 className="text-xl font-semibold mb-2">7. Data Security</h2>
+          <p>
+            We implement appropriate technical and organizational measures to protect your data. However, no method of transmission over the internet is 100% secure.
+          </p>
+        </section>
+
+        <section className="mb-10">
+          <h2 className="text-xl font-semibold mb-2">8. Changes to This Policy</h2>
+          <p>
+            We may update this policy from time to time. Changes will be posted on this page and, if significant, notified via email.
+          </p>
+        </section>
+
+        <section className="mb-10">
+          <h2 className="text-xl font-semibold mb-2">9. Contact Us</h2>
+          <p>
+            If you have any questions about this Privacy Policy, please contact us at <a href="mailto:support@yourdomain.com" className="underline text-blue-600">support@yourdomain.com</a>.
+          </p>
+        </section>
+      </main>
+    </div>
+  );
+}

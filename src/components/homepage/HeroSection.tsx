@@ -110,7 +110,7 @@ useEffect(() => {
     const onScroll = () => {
       setIsStickyVisible(false);
       clearTimeout(timer);
-      timer = setTimeout(() => setIsStickyVisible(true), 30000);
+      timer = setTimeout(() => setIsStickyVisible(true), 15000);
     };
     window.addEventListener('scroll', onScroll);
     return () => {
@@ -151,35 +151,35 @@ useEffect(() => {
 
       <motion.div className="relative z-10 max-w-7xl w-full mx-auto px-6 py-20 grid grid-cols-1 md:grid-cols-2 gap-12 items-center" initial="hidden" animate={controls}>
         <div>
-          <motion.div variants={textVariants} custom={0} className="text-sm text-muted mb-1">
-            {greeting}
+          <motion.div variants={textVariants} custom={0} className="text-lg font-bold mb-1 hover:scale-101 text-black">
+            {greeting} 
           </motion.div>
-          <motion.h1 variants={textVariants} custom={1} className="text-[clamp(2.2rem,5vw,4rem)] font-extrabold tracking-tight leading-tight mb-6">
+          <motion.h1 variants={textVariants} custom={1} className="text-[clamp(2.2rem,5vw,4rem)] font-extrabold tracking-tight leading-tight mb-6 hover:scale-103">
             <span className="mr-2" role="img" aria-label="rocket"></span>{personalizedHeadline || headline}
           </motion.h1>
           {subheadline && (
-            <motion.p variants={textVariants} custom={1.5} className="text-[clamp(1rem,2vw,1.25rem)] text-textLight mb-6 max-w-xl">
+            <motion.p variants={textVariants} custom={1.5} className="text-[clamp(1rem,2vw,1.25rem)] text-textLight mb-6 max-w-xl hover:scale-102">
               {subheadline}
             </motion.p>
           )}
           {ctaText && ctaLink && (
-            <motion.div variants={textVariants} custom={2} className="relative group inline-block">
-              <div className="absolute -inset-2 rounded-full bg-primary/20 blur-2xl opacity-40 animate-pulse z-[-1]" />
-              <Link ref={ctaRef} href={{ pathname: ctaLink }} className={`inline-flex items-center justify-center px-6 py-3 text-lg font-semibold rounded-full transition shadow-lg ring-1 ${modifiedCTA ? 'bg-accent text-black' : 'bg-primary text-black'}`}>
+            <motion.div variants={textVariants} custom={2} className="relative group inline-block hover:scale-105">
+              <div className="absolute -inset-2 rounded-full bg-primary/20 animate-pulse z-[-1]" />
+              <Link ref={ctaRef} href={{ pathname: ctaLink }} className={`inline-flex items-center justify-center px-6 py-3 text-lg text-black font-semibold rounded-full transition shadow-lg ring-1 ${modifiedCTA ? 'bg-accent text-black' : 'bg-primary text-black'}`}>
                 {modifiedCTA ? 'Claim My Free Trial' : ctaText}
               </Link>
-              <div className="absolute left-0 top-full mt-2 text-sm text-muted opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+              <div className="relative left-0 top-full mt-2 text-sm text-muted opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                 No card required. Cancel anytime.
               </div>
             </motion.div>
           )}
-          <div className="mt-6 text-xs text-muted">SOC2 Certified • GDPR Ready • Trusted by 10,000+ users</div>
+          <div className="mt-6 text-xs text-muted hover:scale-101">SOC2 Certified • GDPR Ready • Trusted by 10,000+ users</div>
           <div className="mt-2 flex items-center gap-4 text-xs text-muted">
           </div>
         </div>
       </motion.div>
 
-      <motion.div variants={textVariants} custom={2.5} className="absolute z-30 group" style={{ bottom: '35%', left: '54%', width: '700px', transform: 'perspective(1000px) rotateX(0.3deg) rotateY(-0.8deg) rotate(-1deg)', filter: 'contrast(0.85) brightness(1.05)', transition: 'transform 0.4s ease' }}>
+      <motion.div variants={textVariants} custom={2.5} className="absolute z-30 group hover:scale-105" style={{ bottom: '35%', left: '54%', width: '700px', transform: 'perspective(1000px) rotateX(0.3deg) rotateY(-0.8deg) rotate(-1deg)', filter: 'contrast(0.85) brightness(1.05)', transition: 'transform 0.4s ease' }}>
         <div className="relative rounded-xl">
           {image && (
           <Image
@@ -210,7 +210,7 @@ useEffect(() => {
       </div>
 
       {isStickyVisible && (
-        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 bg-primary text-white px-6 py-2 rounded-full shadow-xl text-sm z-50">
+        <div className="fixed bottom-40 left-1/2 -translate-x-1/2 bg-black text-white font-bold opacity-90 hover:scale-105 px-6 py-2 rounded-full shadow-xl z-50">
           Still thinking? Start your free trial now →
         </div>
       )}
