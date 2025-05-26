@@ -9,7 +9,7 @@ import { type NextRequest } from 'next/server'
  * Accessed via https://yourdomain.com/server-sitemap.xml
  */
 
-export async function GET(_req: NextRequest): Promise<ReturnType<typeof getServerSideSitemap>> {
+export function GET(_req: NextRequest) {
   const siteUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://authorityplatform.com'
 
   const fields: ISitemapField[] = [
@@ -25,9 +25,7 @@ export async function GET(_req: NextRequest): Promise<ReturnType<typeof getServe
       changefreq: 'monthly',
       priority: 0.7,
     },
-    // Add more entries dynamically as needed
-    // e.g., fetched from CMS or DB
   ]
 
-  return getServerSideSitemap(fields)
+  return getServerSideSitemap(fields) // directly return Promise<Response>
 }

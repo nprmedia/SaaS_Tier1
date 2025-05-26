@@ -72,6 +72,9 @@ importers:
         specifier: github:aquasecurity/trivy
         version: https://codeload.github.com/aquasecurity/trivy/tar.gz/6c7cb7ad2d0feef3317c1693facba43099f823fc
     devDependencies:
+      '@eslint/eslintrc':
+        specifier: ^3.3.1
+        version: 3.3.1
       '@tailwindcss/aspect-ratio':
         specifier: ^0.4.2
         version: 0.4.2(tailwindcss@4.1.7)
