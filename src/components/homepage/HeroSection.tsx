@@ -22,7 +22,6 @@ interface HeroProps {
   };
 }
 
-
 const HeroSection: React.FC<HeroProps> = ({ headline, subheadline, ctaText, ctaLink, image }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const parallaxRef = useRef<HTMLDivElement>(null);
@@ -73,21 +72,21 @@ const HeroSection: React.FC<HeroProps> = ({ headline, subheadline, ctaText, ctaL
     }
   }, [searchParams]);
 
-useEffect(() => {
-  if (prefersReducedMotion) return;
+  useEffect(() => {
+    if (prefersReducedMotion) return;
 
-  const original = document.body.style.overflow;
-  document.body.style.overflow = 'hidden';
+    const original = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
 
-  controls.start('visible').then(() => {
-    document.body.style.overflow = original;
-    setIsFrozen(false);
-  });
+    controls.start('visible').then(() => {
+      document.body.style.overflow = original;
+      setIsFrozen(false);
+    });
 
-  return () => {
-    document.body.style.overflow = original; // ✅ clean up always
-  };
-}, [controls, prefersReducedMotion]);
+    return () => {
+      document.body.style.overflow = original;
+    };
+  }, [controls, prefersReducedMotion]);
 
   useEffect(() => {
     if (!parallaxRef.current || prefersReducedMotion) return;
@@ -152,7 +151,7 @@ useEffect(() => {
       <motion.div className="relative z-10 max-w-7xl w-full mx-auto px-6 py-20 grid grid-cols-1 md:grid-cols-2 gap-12 items-center" initial="hidden" animate={controls}>
         <div>
           <motion.div variants={textVariants} custom={0} className="text-lg font-bold mb-1 hover:scale-101 text-black">
-            {greeting} 
+            {greeting}
           </motion.div>
           <motion.h1 variants={textVariants} custom={1} className="text-[clamp(2.2rem,5vw,4rem)] font-extrabold tracking-tight leading-tight mb-6 hover:scale-103">
             <span className="mr-2" role="img" aria-label="rocket"></span>{personalizedHeadline || headline}
@@ -174,24 +173,37 @@ useEffect(() => {
             </motion.div>
           )}
           <div className="mt-6 text-xs text-muted hover:scale-101">SOC2 Certified • GDPR Ready • Trusted by 10,000+ users</div>
-          <div className="mt-2 flex items-center gap-4 text-xs text-muted">
-          </div>
         </div>
       </motion.div>
 
-      <motion.div variants={textVariants} custom={2.5} className="absolute z-30 group hover:scale-105" style={{ bottom: '35%', left: '54%', width: '700px', transform: 'perspective(1000px) rotateX(0.3deg) rotateY(-0.8deg) rotate(-1deg)', filter: 'contrast(0.85) brightness(1.05)', transition: 'transform 0.4s ease' }}>
-        <div className="relative rounded-xl">
+      {/* ✅ Updated Hero Image Block */}
+      <motion.div
+        variants={textVariants}
+        custom={2.5}
+        className="absolute z-30 group hover:scale-105 w-full max-w-[700px] left-1/2 transform -translate-x-1/2 md:left-[74%] md:transform-none"
+        style={{
+          bottom: '35%',
+          filter: 'contrast(0.85) brightness(1.05)',
+          transition: 'transform 0.4s ease',
+        }}
+      >
+        <div className="relative w-full rounded-xl">
           {image && (
-          <Image
-            src={image.url}
-            alt={image.alt || 'Product Screenshot'}
-            width={image.width || 480}
-            height={image.height || 480}
-            className="rounded-xl shadow-2xl"
-            priority
+            <Image
+              src={image.url}
+              alt={image.alt || 'Product Screenshot'}
+              width={image.width || 480}
+              height={image.height || 480}
+              className="w-full h-auto rounded-xl shadow-2xl"
+              priority
+            />
+          )}
+          <div
+            className="absolute top-0 left-0 w-full h-full pointer-events-none rounded-xl"
+            style={{
+              background: 'linear-gradient(270deg, rgba(0, 0, 0, 0.15), transparent 60%)',
+            }}
           />
-        )}
-          <div className="absolute top-0 left-0 w-full h-full pointer-events-none rounded-xl" style={{ background: 'linear-gradient(270deg, rgba(0, 0, 0, 0.15), transparent 60%)' }} />
         </div>
       </motion.div>
 
