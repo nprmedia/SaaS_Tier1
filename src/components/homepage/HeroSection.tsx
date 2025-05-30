@@ -148,44 +148,39 @@ const HeroSection: React.FC<HeroProps> = ({ headline, subheadline, ctaText, ctaL
       </div>
       <div className="absolute inset-0 z-[5] pointer-events-none" style={{ background: 'linear-gradient(135deg, rgba(0, 170, 255, 0.25), rgba(255,220,180,0.05))' }} />
 
-      <motion.div className="relative z-10 max-w-7xl w-full mx-auto px-6 py-20 grid grid-cols-1 md:grid-cols-2 gap-12 items-center" initial="hidden" animate={controls}>
-        <div>
-          <motion.div variants={textVariants} custom={0} className="text-lg font-bold mb-1 hover:scale-101 text-black">
+      <motion.div className="relative z-10 max-w-[88rem] w-full mx-auto px-[clamp(1rem,4vw,2rem)] py-[clamp(4rem,8vw,6rem)] grid grid-cols-1 md:grid-cols-2 gap-[clamp(2rem,6vw,5rem)] items-center" initial="hidden" animate={controls}>
+        <div className="pl-[clamp(0.5rem,2vw,1.5rem)]">
+          <motion.div variants={textVariants} custom={0} className="text-[clamp(0.75rem,1.4vw,1rem)] font-bold mb-1 hover:scale-101 text-black">
             {greeting}
           </motion.div>
-          <motion.h1 variants={textVariants} custom={1} className="text-[clamp(2.2rem,5vw,4rem)] font-extrabold tracking-tight leading-tight mb-6 hover:scale-103">
-            <span className="mr-2" role="img" aria-label="rocket"></span>{personalizedHeadline || headline}
+          <motion.h1 variants={textVariants} custom={1} className="text-[clamp(1.8rem,4vw,3.2rem)] font-extrabold tracking-tight leading-tight mb-4 hover:scale-103">
+            {personalizedHeadline || headline}
           </motion.h1>
           {subheadline && (
-            <motion.p variants={textVariants} custom={1.5} className="text-[clamp(1rem,2vw,1.25rem)] text-textLight mb-6 max-w-xl hover:scale-102">
+            <motion.p variants={textVariants} custom={1.5} className="text-[clamp(0.85rem,1.8vw,1.1rem)] text-textLight mb-4 max-w-xl hover:scale-102">
               {subheadline}
             </motion.p>
           )}
           {ctaText && ctaLink && (
             <motion.div variants={textVariants} custom={2} className="relative group inline-block hover:scale-105">
-              <div className="absolute -inset-2 rounded-full bg-primary/20 animate-pulse z-[-1]" />
-              <Link ref={ctaRef} href={{ pathname: ctaLink }} className={`inline-flex items-center justify-center px-6 py-3 text-lg text-black font-semibold rounded-full transition shadow-lg ring-1 ${modifiedCTA ? 'bg-accent text-black' : 'bg-primary text-black'}`}>
+              <div className="absolute -inset-1.5 rounded-full bg-primary/20 animate-pulse z-[-1]" />
+              <Link ref={ctaRef} href={{ pathname: ctaLink }} className={`inline-flex items-center justify-center px-4 py-2 text-[clamp(0.8rem,1.2vw,1rem)] text-black font-semibold rounded-full transition shadow-lg ring-1 ${modifiedCTA ? 'bg-accent text-black' : 'bg-primary text-black'}`}>
                 {modifiedCTA ? 'Claim My Free Trial' : ctaText}
               </Link>
-              <div className="relative left-0 top-full mt-2 text-sm text-muted opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+              <div className="relative left-0 top-full mt-1 text-[0.75rem] text-muted opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                 No card required. Cancel anytime.
               </div>
             </motion.div>
           )}
-          <div className="mt-6 text-xs text-muted hover:scale-101">SOC2 Certified • GDPR Ready • Trusted by 10,000+ users</div>
+          <div className="mt-4 text-[0.7rem] text-muted hover:scale-101">SOC2 Certified • GDPR Ready • Trusted by 10,000+ users</div>
         </div>
       </motion.div>
 
-      {/* ✅ Updated Hero Image Block */}
       <motion.div
         variants={textVariants}
         custom={2.5}
-        className="absolute z-30 group hover:scale-105 w-full max-w-[700px] left-1/2 transform -translate-x-1/2 md:left-[74%] md:transform-none"
-        style={{
-          bottom: '35%',
-          filter: 'contrast(0.85) brightness(1.05)',
-          transition: 'transform 0.4s ease',
-        }}
+        className="absolute z-30 group hover:scale-105 w-full max-w-[clamp(22rem,38vw,38rem)] left-1/2 transform -translate-x-1/2 md:left-[74%] md:transform-none"
+        style={{ bottom: '32%', filter: 'contrast(0.85) brightness(1.05)', transition: 'transform 0.4s ease' }}
       >
         <div className="relative w-full rounded-xl">
           {image && (
@@ -200,9 +195,7 @@ const HeroSection: React.FC<HeroProps> = ({ headline, subheadline, ctaText, ctaL
           )}
           <div
             className="absolute top-0 left-0 w-full h-full pointer-events-none rounded-xl"
-            style={{
-              background: 'linear-gradient(270deg, rgba(0, 0, 0, 0.15), transparent 60%)',
-            }}
+            style={{ background: 'linear-gradient(270deg, rgba(0, 0, 0, 0.15), transparent 60%)' }}
           />
         </div>
       </motion.div>
@@ -210,19 +203,19 @@ const HeroSection: React.FC<HeroProps> = ({ headline, subheadline, ctaText, ctaL
       <BeamOfLight />
 
       <div className="absolute bottom-20 w-full px-6">
-        <div className="flex justify-center gap-6 opacity-70 grayscale">
-          <Image src="/logos/stripe.svg" alt="Stripe" width={80} height={24} />
-          <Image src="/logos/slack.svg" alt="Slack" width={80} height={24} />
-          <Image src="/logos/notion.svg" alt="Notion" width={80} height={24} />
+        <div className="flex justify-center gap-4 opacity-70 grayscale">
+          <Image src="/logos/stripe.svg" alt="Stripe" width={64} height={18} />
+          <Image src="/logos/slack.svg" alt="Slack" width={64} height={18} />
+          <Image src="/logos/notion.svg" alt="Notion" width={64} height={18} />
         </div>
       </div>
 
       <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-10">
-        <div className="animate-bounce text-primary text-2xl drop-shadow-[0_0_6px_rgba(255,255,255,0.6)]">↓</div>
+        <div className="animate-bounce text-primary text-xl drop-shadow-[0_0_6px_rgba(255,255,255,0.6)]">↓</div>
       </div>
 
       {isStickyVisible && (
-        <div className="fixed bottom-40 left-1/2 -translate-x-1/2 bg-black text-white font-bold opacity-90 hover:scale-105 px-6 py-2 rounded-full shadow-xl z-50">
+        <div className="fixed bottom-36 left-1/2 -translate-x-1/2 bg-black text-white text-sm font-bold opacity-90 hover:scale-105 px-4 py-2 rounded-full shadow-xl z-50">
           Still thinking? Start your free trial now →
         </div>
       )}
