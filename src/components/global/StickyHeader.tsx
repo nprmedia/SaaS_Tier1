@@ -26,23 +26,29 @@ export default function StickyHeader() {
           : 'bg-transparent backdrop-blur-0'
       } text-black`}
     >
-      <div className="mx-auto w-full px-3 md:px-10 lg:px-60 flex items-center bg-white justify-between h-20">
-        <Link href="/" className="text-xl font-bold tracking-tight hover:scale-105 transition-transform">
+      <div className="mx-auto w-full px-3 md:px-10 lg:px-60 flex items-center bg-white justify-between h-[clamp(3rem,6vw,3.75rem)]">
+        <Link
+          href="/"
+          className="text-[clamp(0.9rem,1.4vw,1.25rem)] font-bold tracking-tight hover:scale-105 transition-transform"
+        >
           Authority Platform
         </Link>
-        <nav className="hidden md:flex gap-8 items-center">
-          <Link href="/features" className="hover:text-blue-600 hover:scale-105 transition-transform">
+        <nav className="hidden md:flex gap-[clamp(1.25rem,3vw,2rem)] items-center">
+          <Link href="/features" className="text-[clamp(0.75rem,1vw,0.875rem)] hover:text-blue-600 hover:scale-105 transition-transform">
             Features
           </Link>
-          <Link href="/pricing" className="hover:text-blue-600 hover:scale-105 transition-transform">
+          <Link href="/pricing" className="text-[clamp(0.75rem,1vw,0.875rem)] hover:text-blue-600 hover:scale-105 transition-transform">
             Pricing
           </Link>
-          <Link href="/contact" className="hover:text-blue-600 hover:scale-105 transition-transform">
+          <Link href="/contact" className="text-[clamp(0.75rem,1vw,0.875rem)] hover:text-blue-600 hover:scale-105 transition-transform">
             Contact
+          </Link>
+          <Link href="/blog" className="text-[clamp(0.75rem,1vw,0.875rem)] hover:text-blue-600 hover:scale-105 transition-transform">
+            Blog
           </Link>
           <Link
             href="/signup"
-            className="ml-6 inline-flex items-center gap-2 bg-black text-white px-5 py-2 rounded-lg text-sm font-semibold shadow hover:brightness-110 hover:scale-105 transition-transform"
+            className="ml-4 inline-flex items-center gap-2 bg-black text-white px-4 py-[0.45rem] rounded-lg text-[clamp(0.65rem,0.9vw,0.75rem)] font-semibold shadow hover:brightness-110 hover:scale-105 transition-transform"
           >
             Get Started →
           </Link>
