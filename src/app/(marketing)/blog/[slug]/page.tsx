@@ -5,7 +5,7 @@ export async function generateStaticParams() {
   return allBlogs.map((post) => ({ slug: post.slug }));
 }
 
-export default function BlogPostPage({ params }: { params: { slug: string } }) {
+export default async function BlogPostPage({ params }: { params: { slug: string } }) {
   const post = allBlogs.find((p) => p.slug === params.slug);
 
   if (!post) return notFound();
